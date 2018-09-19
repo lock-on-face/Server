@@ -9,7 +9,7 @@ class Controller {
             .status(201)
             .json({
                 msg: "succesfully created locker",
-                locker
+                data: locker
             })
         }))
         .catch((err => {
@@ -30,7 +30,7 @@ class Controller {
             .status(200)
             .json({
                 msg: "list of lockers and their owners",
-                lockers
+                data: lockers
             })
         }))
         .catch((err => {
@@ -44,14 +44,15 @@ class Controller {
     }
 
     static getOne (req, res) {
-        let { _id } = req.body
-        lockerModel.findById(_id)
+        let { owner } = req.body
+        lockerModel.find({owner})
+        .populate('owner')
         .then((locker => {
             res
             .status(200)
             .json({
                 msg: "got specific locker",
-                locker
+                data: locker
             })
         }))
         .catch((err => {
@@ -65,14 +66,14 @@ class Controller {
     }
 
     static updateLocker (req, res) {
-        let { _id } = req.body
-        lockerModel.findByIdAndUpdate(_id, req.body)
+        let { id } = req.params
+        lockerModel.findByIdAndUpdate(id, req.body)
         .then((result => {
             res
             .status(201)
             .json({
                 msg: "succesfully updated",
-                result
+                data: result
             })
         }))
         .catch((err => {
@@ -85,15 +86,15 @@ class Controller {
         }))
     }
 
-    static delleteLocker (req, res) {
-        let { _id } = req.body
-        lockerModel.findByIdAndRemove(_id)
+    static deleteLocker (req, res) {
+        let { id } = req.params
+        lockerModel.findByIdAndRemove(id)
         .then((result => {
             res
             .status(201)
             .json({
                 msg: "succesfully deleted locker and its contents",
-                result
+                data: result
             })
         }))
         .catch((err => {

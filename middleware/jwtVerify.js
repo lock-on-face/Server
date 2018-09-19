@@ -14,8 +14,8 @@ class Controller {
                         err
                     })
                 } else {
-                    let { _id } = decoded
-                    req.body.owner = _id
+                    let { id } = decoded
+                    req.body.owner = id
                     next()
                 }
             })
@@ -24,6 +24,40 @@ class Controller {
             .status(403)
             .json({
                 msg: "please sign in"
+            })
+        }
+    }
+
+    static verifyAdmin (req, res, next) {
+        let { token } = req.headers
+        if ( token ) {
+            jwt.verify(token, 'secret', (err, decoded) => {
+                if (err) {
+                    res
+                    .status(403)
+                    .json({
+                        msg: "failed to decode",
+                        err
+                    })
+                } else {
+                    let { isAdmin } = decoded
+                    if (isAdmin) {
+                        next()
+                    } else {
+                        res
+                        .status(403)
+                        .json({
+                            msg: "insufficient priviledged",
+                            err
+                        })
+                    }
+                }
+            })
+        } else {
+            res
+            .status(400)
+            .json({
+                msg: "please provide a token"
             })
         }
     }
