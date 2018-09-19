@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const lockerSchema = new Schema({
     serialNumber: { type: String, unique: true, required: true },
-    owner: { type: Schema.Types.ObjectId('User') },
+    owner: { type: Schema.Types.ObjectId, ref: "User" },
     items: [{ type: String }]
 }, {
     timestamps: true
