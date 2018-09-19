@@ -7,7 +7,7 @@ const jwtmiddleware = require('../middleware/jwtVerify')
 router.get('/', userController.getAll)
 router.post('/signin', userController.signIn)
 router.post('/signup', userController.signUp)
-router.post('/admin', jwtmiddleware.verifyAdmin, userController.registerAdmin )
+router.post('/admin', userController.registerAdmin )
 router.put('/topup', jwtmiddleware.verifyUser, userController.topUp )
 
 module.exports = router;
