@@ -14,14 +14,29 @@ const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dote = require('dotenv').config();
-mongoose.connect('mongodb://admin:abc123@ds259742.mlab.com:59742/final-project');
+// mongoose.connect('mongodb://admin:abc123@ds259742.mlab.com:59742/final-project');
 
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
- console.log('connected to final project');
- // we're connected!
-});
+var MONGO_URI = `mongodb://admin:abc123@ds259742.mlab.com:59742/final-project`
+var test = `mongodb://mario:mario123@ds259912.mlab.com:59912/testing-server-finalproject`
+
+if(process.env.NODE_ENV == 'test'){
+  MONGO_URI = test
+}
+mongoose.connect(MONGO_URI,{useNewUrlParser: true}, function(err){
+  if(err){
+    console.log(err)
+  }else{
+    console.log('connected')
+  }
+})
+
+
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function() {
+//  console.log('connected to final project');
+//  // we're connected!
+// });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
