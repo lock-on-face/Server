@@ -3,75 +3,94 @@ var chaiHttp = require('chai-http')
 chai.use(chaiHttp)
 var mongoose = require('mongoose')
 var User = require('../model/userModel')
+var jwt = require('jsonwebtoken')
 
 chai.should()
 var url = "http://localhost:3000"
 
 describe('User', () => {
-  after(function(done){
-    mongoose.connect('mongodb://mario:mario123@ds259912.mlab.com:59912/testing-server-finalproject',(err) => {
-      User.collection.drop()
-      done()
-      })
+  afterEach(function(done){
+    mongoose.connect('mongodb://mario:mario123@ds259912.mlab.com:59912/testing-server-finalproject',{useNewUrlParser:true},(err) => {
+      if(err){
+        console.log(err)
+      }else{
+        User.collection.drop()
+        done()
+      }  
     })
-    it('POST /user/register should add data user', function(done){
+  })
+
+    it('POST /user/signup should add data user', function(done){
       chai.request(url)
-      .post('/users/register')
+      .post('/users/signup')
       .send({
-        'email': 'tes@mail.com',
-        'username': 'testingname',
-        'password': 'testingpassword',
-        'phone': 'testingphone',
-        'image': 'testingImage'
+        'email': 'tes@mail1.com',
+        'username': 'testingname1',
+        'password': 'testingpassword1',
+        'phone': 'testingphone1',
+        'image': 'testingImage1'
       })
       .end(function(err,res){
-        res.should.have.status(200)
+        res.should.have.status(201)
         res.body.should.be.a('object')
-        res.should.have.property('dataUser')
-        res.body.dataUser.should.be.a('object')
-        res.body.dataUser.should.have.property('email')
-        res.body.dataUser.should.have.property('username')
-        res.body.dataUser.should.have.property('password')
-        res.body.dataUser.should.have.property('phone')
-        res.body.dataUser.should.have.property('rented')
-        res.body.dataUser.should.have.property('credit')
-        res.body.dataUser.should.have.property('image')
-        res.body.dataUser.should.have.property('isAdmin')
+        res.body.should.have.property('data')
+        res.body.should.have.property('msg')
+        res.body.data.should.have.property('username')
+        res.body.data.should.have.property('email')
+        res.body.data.should.have.property('password')
+        res.body.data.should.have.property('phone')
+        res.body.data.should.have.property('image')
+        res.body.data.should.have.property('credits')
+        res.body.data.should.have.property('isAdmin')
+        res.body.data.username.should.be.a('string')
+        res.body.data.email.should.be.a('string')
+        res.body.data.image.should.be.a('string')
+        res.body.data.password.should.be.a('string')
+        res.body.data.phone.should.be.a('string')
+        res.body.data.credits.should.be.a('number')
+        res.body.data.isAdmin.should.be.a('boolean')
         done()
       })
     })
 
-    it('GET/user/all should show data user', (done) => {
+    it('POST /users/signin should login',function(done){
       chai.request(url)
-      .get('/users/all')
+      .post('/users/signin')
+      .send({
+        "username": "testingname1",
+        "password": "testingpassword1"
+      })
       .end(function(err,res){
+        var decoded = jwt.verify(res.body.token,'secret')
         res.should.have.status(200)
-        res.body.should.be.a('array')
+        res.body.should.have.property('token')
+        decoded.should.have.property('username')
+        decoded.should.have.property('image')
+        decoded.should.have.property('credits')
+        decoded.should.have.property('isAdmin')
+        decoded.username.should.equal('testingname1')
         done()
       })
     })
 
-    it('PUT /user/edit/id should edit data user', (done) => {
+    it('POST /users/admin should register admin',function(done){
       chai.request(url)
-      .put('/user/edit/123213')
+      .post('/users/admin')
       .send({
-        'username': 'test',
-        'email': 'email',
-        'phone': 'phone',
-        'credit': 'credit'
+        "username": "admintesting",
+        "password": "passwordAdmin",
+        "email": "email@Admin.com",
+        "phone": "phoneAdmin",
+        "image": "imageAdmin"
       })
       .end(function(err,res){
-        res.should.have.status(200)
-        res.body.should.be.a('object')
+        res.should.have.status(201)
+        done()
       })
     })
 
-    it('DELETE /user/delete/id should delete data user', (done) =>{
-      chai.request(url)
-      .put('/user/delete/123')
-    })
-    .end(function(err,res){
-      res.should.have.status(200)
-    })
+   
+
+ 
 })
 
