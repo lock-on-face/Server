@@ -3,7 +3,9 @@ const jwt = require('jsonwebtoken')
 class Controller {
 
     static verifyUser (req, res, next) {
+        console.log('masuk middle')
         let { token } = req.headers
+        console.log('ini middleware',req.headers)
         if ( token ) {
             jwt.verify(token, 'secret', (err, decoded) => {
                 if (err) {
