@@ -45,7 +45,6 @@ class Controller {
     }
 
     static getOne (req, res) {
-        console.log('masuk get one locker')
         let { owner } = req.body
         lockerModel.find({owner})
         .populate('owner')

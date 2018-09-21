@@ -10,35 +10,35 @@ var url = "http://localhost:3000"
 mongoose.set('useCreateIndex', true);
 
 describe('Locker', () =>{
-  // afterEach(function(done){
-  //     mongoose.connect('mongodb://mario:mario123@ds259912.mlab.com:59912/finalproject-testingserver',{useNewUrlParser:true},(err) => {
-  //       if(err){
-  //         console.log(err)
-  //       }else{
-  //         Locker.collection.drop()
-  //         done()
-  //       }  
-  //     })
-  //   })
-  // it('POST /locker should create locker', (done) =>{
-  //   chai.request(url)
-  //   .post('/locker')
-  //   .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTMwMGMxYjU1NDNkMGM5OWFhMDQwMCIsInVzZXJuYW1lIjoiamFjayIsImVtYWlsIjoiamFja0BtYWlsLmNvbSIsInBob25lIjoiMTIzNDU1IiwiaW1hZ2UiOiJqaHNkYWZkc2pmamtramlqaCIsImlzQWRtaW4iOmZhbHNlLCJjcmVkaXRzIjoxMCwiaWF0IjoxNTM3NDA5Mjk2fQ.MTLKMJEV7bgZBE0SdFSNoPwQb1LtatE-u2h4wYuMyGY')
-  //   .send({
-  //     "serialNumber":"001"
-  //   })
-  //   .end((err,res)=>{
-  //     res.should.have.status(201)
-  //     res.body.should.have.property('data')
-  //     res.body.data.should.have.property('owner')
-  //     res.body.data.should.have.property('serialNumber')
-  //     res.body.data.should.have.property('_id')
-  //     res.body.data.should.be.a('object')
-  //     res.body.data.serialNumber.should.be.a('string')
-  //     res.body.data.owner.should.be.a('string')
-  //     done()
-  //   })
-  // })
+  afterEach(function(done){
+      mongoose.connect('mongodb://mario:mario123@ds259912.mlab.com:59912/finalproject-testingserver',{useNewUrlParser:true},(err) => {
+        if(err){
+          console.log(err)
+        }else{
+          Locker.collection.drop()
+          done()
+        }  
+      })
+    })
+  it('POST /locker should create locker', (done) =>{
+    chai.request(url)
+    .post('/locker')
+    .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTMwMGMxYjU1NDNkMGM5OWFhMDQwMCIsInVzZXJuYW1lIjoiamFjayIsImVtYWlsIjoiamFja0BtYWlsLmNvbSIsInBob25lIjoiMTIzNDU1IiwiaW1hZ2UiOiJqaHNkYWZkc2pmamtramlqaCIsImlzQWRtaW4iOmZhbHNlLCJjcmVkaXRzIjoxMCwiaWF0IjoxNTM3NDA5Mjk2fQ.MTLKMJEV7bgZBE0SdFSNoPwQb1LtatE-u2h4wYuMyGY')
+    .send({
+      "serialNumber":"001"
+    })
+    .end((err,res)=>{
+      res.should.have.status(201)
+      res.body.should.have.property('data')
+      res.body.data.should.have.property('owner')
+      res.body.data.should.have.property('serialNumber')
+      res.body.data.should.have.property('_id')
+      res.body.data.should.be.a('object')
+      res.body.data.serialNumber.should.be.a('string')
+      res.body.data.owner.should.be.a('string')
+      done()
+    })
+  })
 
   it('GET /locker should get all data locker', (done) =>{
     chai.request(url)
@@ -78,35 +78,35 @@ describe('Locker', () =>{
     })
   })
 
-  // it('PUT /locker/:id should edit data locker', (done)=>{
-  //   chai.request(url)
-  //   .put('/locker/5ba340cd9d4b05306f475502')
-  //   .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTMwMGMxYjU1NDNkMGM5OWFhMDQwMCIsInVzZXJuYW1lIjoiamFjayIsImVtYWlsIjoiamFja0BtYWlsLmNvbSIsInBob25lIjoiMTIzNDU1IiwiaW1hZ2UiOiJqaHNkYWZkc2pmamtramlqaCIsImlzQWRtaW4iOmZhbHNlLCJjcmVkaXRzIjoxMCwiaWF0IjoxNTM3NDA5Mjk2fQ.MTLKMJEV7bgZBE0SdFSNoPwQb1LtatE-u2h4wYuMyGY')
-  //   .send({
-  //     "owner": "null",
-  //     "items": "rahasia",
-  //     "rented": "true",
-  //     "isLocked": "true"
-  //   })
-  //   .end((err,res) =>{
-  //     res.should.have.status(201)
-  //     res.body.should.have.property('data')
-  //     res.body.data.should.be.a('object')
-  //     res.body.data.should.have.property('owner')
-  //     res.body.data.should.have.property('rented')
-  //     res.body.data.should.have.property('serialNumber')
-  //     done()
-  //   })
-  // })
+  it('PUT /locker/:id should edit data locker', (done)=>{
+    chai.request(url)
+    .put('/locker/5ba340cd9d4b05306f475502')
+    .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTMwMGMxYjU1NDNkMGM5OWFhMDQwMCIsInVzZXJuYW1lIjoiamFjayIsImVtYWlsIjoiamFja0BtYWlsLmNvbSIsInBob25lIjoiMTIzNDU1IiwiaW1hZ2UiOiJqaHNkYWZkc2pmamtramlqaCIsImlzQWRtaW4iOmZhbHNlLCJjcmVkaXRzIjoxMCwiaWF0IjoxNTM3NDA5Mjk2fQ.MTLKMJEV7bgZBE0SdFSNoPwQb1LtatE-u2h4wYuMyGY')
+    .send({
+      "owner": "null",
+      "items": "rahasia",
+      "rented": "true",
+      "isLocked": "true"
+    })
+    .end((err,res) =>{
+      res.should.have.status(201)
+      res.body.should.have.property('data')
+      res.body.data.should.be.a('object')
+      res.body.data.should.have.property('owner')
+      res.body.data.should.have.property('rented')
+      res.body.data.should.have.property('serialNumber')
+      done()
+    })
+  })
 
-  // it('DELETE /locker/:id should delete data locker', (done) =>{
-  //   chai.request(url)
-  //   .delete('/locker/5ba340cd9d4b05306f475502')
-  //   .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTM0OTkxZDg4NDNlMzQxZWQ5MzI2NiIsInVzZXJuYW1lIjoibHVjaSIsImVtYWlsIjoibHVjaUBtYWlsLmNvbSIsInBob25lIjoiMTIzMjU2IiwiaW1hZ2UiOiIzcCIsImlzQWRtaW4iOnRydWUsImNyZWRpdHMiOjEwLCJpYXQiOjE1Mzc0Mjc5MTR9.E9gNbg0VhfIskr1tTFp7zJpjEbeNaJYRlognnO19D24')
-  //   .end((err,res)=>{
-  //     res.should.have.status(201)
-  //     done()
-  //   })
-  // })
+  it('DELETE /locker/:id should delete data locker', (done) =>{
+    chai.request(url)
+    .delete('/locker/5ba340cd9d4b05306f475502')
+    .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTM0OTkxZDg4NDNlMzQxZWQ5MzI2NiIsInVzZXJuYW1lIjoibHVjaSIsImVtYWlsIjoibHVjaUBtYWlsLmNvbSIsInBob25lIjoiMTIzMjU2IiwiaW1hZ2UiOiIzcCIsImlzQWRtaW4iOnRydWUsImNyZWRpdHMiOjEwLCJpYXQiOjE1Mzc0Mjc5MTR9.E9gNbg0VhfIskr1tTFp7zJpjEbeNaJYRlognnO19D24')
+    .end((err,res)=>{
+      res.should.have.status(201)
+      done()
+    })
+  })
 
 })
