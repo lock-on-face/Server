@@ -3,6 +3,7 @@ const lockerModel = require('../model/lockerModel')
 class Controller {
 
     static createLocker (req, res) {
+        console.log(req.body)
         lockerModel.create(req.body)
         .then((locker => {
             res
@@ -45,6 +46,7 @@ class Controller {
     }
 
     static getOne (req, res) {
+        console.log(req.body);
         let { owner } = req.body
         lockerModel.find({owner})
         .populate('owner')

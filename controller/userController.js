@@ -22,8 +22,9 @@ class Controller {
     }
 
     static signUp(req,res){
+        console.log(req.body)
         let saltRounds = 5;
-        let { username, email, phone, password, image } = req.body
+        let { username, email, phone, password, image, imageFile } = req.body
         bcrpyt.hash(password, saltRounds, (err,hash) => {
             if (err) {
                 res
@@ -37,6 +38,7 @@ class Controller {
                     email,
                     phone,
                     image,
+                    imageFile,
                     password: hash
                 })
                 .then((credentials => {
@@ -61,6 +63,7 @@ class Controller {
     }
 
     static signIn(req,res){
+        console.log(req.body);
         let { username, password } = req.body
         userModel.findOne({ $or:[ {username}, {email: username} ] },(err,data)=>{
             if (err) {
@@ -100,7 +103,8 @@ class Controller {
                                         .status(200)
                                         .json({
                                             token,
-                                            id
+                                            id,
+                                            isAdmin
                                         })
                                     }
                                 })
