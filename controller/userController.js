@@ -7,6 +7,7 @@ class Controller {
     static getAll (req, res) {
         userModel.find()
         .then((data => {
+            console.log(data)
             res
             .status(200)
             .json({
@@ -49,6 +50,7 @@ class Controller {
                     })
                 }))
                 .catch((err => {
+                    console.log(err.message)
                     res
                     .status(400)
                     .json({
@@ -96,6 +98,7 @@ class Controller {
                                         .status(500)
                                         .json(err)
                                     } else {
+                                        console.log(token)
                                         res
                                         .status(200)
                                         .json({
@@ -153,7 +156,7 @@ class Controller {
                     })
                 }))
                 .catch((err => {
-                    console.log(err)
+                    console.log(err.message)
                     res
                     .status(400)
                     .json({
@@ -171,6 +174,7 @@ class Controller {
             $inc: { credits: amount }
         })
         .then((result => {
+            console.log("ini hasil topup",result)
             res
             .status(201)
             .json({
