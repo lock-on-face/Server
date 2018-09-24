@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 class Controller {
 
     static verifyUser (req, res, next) {
+        console.log('ini headers',req.headers);
         let { token } = req.headers
         if ( token ) {
             jwt.verify(token, 'secret', (err, decoded) => {

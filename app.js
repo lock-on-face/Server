@@ -16,7 +16,9 @@ const mongoose = require('mongoose');
 const dote = require('dotenv').config();
 // mongoose.connect('mongodb://admin:abc123@ds259742.mlab.com:59742/final-project');
 
-var MONGO_URI = `mongodb://admin:abc123@ds259742.mlab.com:59742/final-project`
+// var MONGO_URI = `mongodb://admin:abc123@ds259742.mlab.com:59742/final-project`
+// punya wisnu
+var MONGO_URI = `mongodb://testing:testing123@ds261302.mlab.com:61302/testing-final`
 var test = `mongodb://mario:mario123@ds259912.mlab.com:59912/testing-server-finalproject`
 
 if(process.env.NODE_ENV == 'test'){

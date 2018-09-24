@@ -17,7 +17,8 @@ const userSchema = new Schema({
     phone: { type: String, required: true },
     image: { type: String, required: true },
     credits: { type: Number , default: 10 },
-    isAdmin: { type: Boolean, default: false }
+    isAdmin: { type: Boolean, default: false },
+    imageFile: { type: String, required: true },
 }, {
     timestamps: true
 })
