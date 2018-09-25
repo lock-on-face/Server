@@ -2,6 +2,9 @@ var chai = require('chai')
 var chaiHttp = require('chai-http')
 var mongoose = require('mongoose')
 var Notif = require('../model/notificationModel')
+var app = require('../app')
+var User = require('../model/userModel')
+var Locker = require('../model/lockerModel')
 
 chai.use(chaiHttp)
 chai.should()
@@ -9,8 +12,27 @@ var url = "http://localhost:3000"
 mongoose.set('useCreateIndex',true)
 
 describe('Notif', ()=> {
-  it('POST /notification should create notification', (done) =>{
-    chai.request(url)
+  after(function(done){
+    mongoose.connect('mongodb://mario:mario123@ds259912.mlab.com:59912/finalproject-testingserver',{useNewUrlParser:true},(err) => {
+      if(err){
+        console.log(err)
+      }else{
+        Notif.collection.drop()
+        Locker.collection.drop()
+        User.collection.drop()
+        done()
+      }  
+    })
+  })
+  it('POST /notification should create notification', async function(done){
+    try {
+      const regist = await User.create({
+          
+        })
+    } catch (error) {
+      
+    }
+    chai.request(app)
     .post('/notification')
     .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTMwMGMxYjU1NDNkMGM5OWFhMDQwMCIsInVzZXJuYW1lIjoiamFjayIsImVtYWlsIjoiamFja0BtYWlsLmNvbSIsInBob25lIjoiMTIzNDU1IiwiaW1hZ2UiOiJqaHNkYWZkc2pmamtramlqaCIsImlzQWRtaW4iOmZhbHNlLCJjcmVkaXRzIjoxODAsImlhdCI6MTUzNzQyOTE4Mn0.1RxWoS6_oYil8R8TIlioM6IqKOLvXHU3Xh_bPDaEuIU')
     .send({
@@ -30,7 +52,7 @@ describe('Notif', ()=> {
   })
 
   it('GET /notification should get notification by owner', (done) =>{
-    chai.request(url)
+    chai.request(app)
     .get('/notification')
     .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTMwMGMxYjU1NDNkMGM5OWFhMDQwMCIsInVzZXJuYW1lIjoiamFjayIsImVtYWlsIjoiamFja0BtYWlsLmNvbSIsInBob25lIjoiMTIzNDU1IiwiaW1hZ2UiOiJqaHNkYWZkc2pmamtramlqaCIsImlzQWRtaW4iOmZhbHNlLCJjcmVkaXRzIjoxODAsImlhdCI6MTUzNzQyOTE4Mn0.1RxWoS6_oYil8R8TIlioM6IqKOLvXHU3Xh_bPDaEuIU')
     .end((err,res)=>{
@@ -43,7 +65,7 @@ describe('Notif', ()=> {
   })
 
   it('DELETE /notification/id should delete data notification', (done)=>{
-    chai.request(url)
+    chai.request(app)
     .delete('/notification/5ba35203e8b22e39312e0317')
     .set('token','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViYTM0OTkxZDg4NDNlMzQxZWQ5MzI2NiIsInVzZXJuYW1lIjoibHVjaSIsImVtYWlsIjoibHVjaUBtYWlsLmNvbSIsInBob25lIjoiMTIzMjU2IiwiaW1hZ2UiOiIzcCIsImlzQWRtaW4iOnRydWUsImNyZWRpdHMiOjEwLCJpYXQiOjE1Mzc0Mjc5MTR9.E9gNbg0VhfIskr1tTFp7zJpjEbeNaJYRlognnO19D24')
     .end((err,res)=>{
