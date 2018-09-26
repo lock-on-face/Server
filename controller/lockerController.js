@@ -3,7 +3,6 @@ const lockerModel = require('../model/lockerModel')
 class Controller {
 
     static createLocker (req, res) {
-        console.log(req.body)
         lockerModel.create(req.body)
         .then((locker => {
             res
@@ -14,7 +13,6 @@ class Controller {
             })
         }))
         .catch((err => {
-            console.log(err.message)
             res
             .status(400)
             .json({
@@ -46,12 +44,10 @@ class Controller {
     }
 
     static getOne (req, res) {
-        console.log(req.body);
         let { owner } = req.body
         lockerModel.find({owner})
         .populate('owner')
         .then((locker => {
-            console.log('ini dari get one',locker)
             res
             .status(200)
             .json({
@@ -73,7 +69,6 @@ class Controller {
         let { id } = req.params
         lockerModel.findByIdAndUpdate(id, req.body)
         .then((result => {
-            console.log('ini masuk then update',result)
             res
             .status(201)
             .json({

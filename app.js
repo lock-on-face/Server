@@ -23,7 +23,7 @@ var test = `mongodb://mario:mario123@ds259912.mlab.com:59912/finalproject-testin
 if(process.env.NODE_ENV == 'test'){
   MONGO_URI = test
 }
-mongoose.connect(MONGO_URI,{useNewUrlParser: true}, function(err){
+mongoose.connect(test,{useNewUrlParser: true}, function(err){
   if(err){
     console.log(err)
   }else{

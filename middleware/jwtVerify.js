@@ -4,7 +4,7 @@ class Controller {
 
     static verifyUser (req, res, next) {
         let { token } = req.headers
-        console.log('ini middleware',req.headers)
+        // console.log('ini middleware',req.headers)
         if ( token ) {
             jwt.verify(token, 'secret', (err, decoded) => {
                 if (err) {
