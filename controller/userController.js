@@ -7,7 +7,6 @@ class Controller {
     static getAll (req, res) {
         userModel.find()
         .then((data => {
-            console.log(data)
             res
             .status(200)
             .json({
@@ -23,9 +22,10 @@ class Controller {
 
     static signUp(req,res){
         let saltRounds = 5;
-        let { username, email, phone, password, image } = req.body
+        let { username, email, phone, password, image, imageFile } = req.body
         bcrpyt.hash(password, saltRounds, (err,hash) => {
             if (err) {
+                console.log('masuk sini')
                 res
                 .status(500)
                 .json({
@@ -37,6 +37,7 @@ class Controller {
                     email,
                     phone,
                     image,
+                    imageFile,
                     password: hash
                 })
                 .then((credentials => {
@@ -63,23 +64,15 @@ class Controller {
     static signIn(req,res){
         let { username, password } = req.body
         userModel.findOne({ $or:[ {username}, {email: username} ] },(err,data)=>{
-            if (err) {
-                res
-                .status(500)
-                .json(err)
-            }else{
+            // if (err) {
+            //     res
+            //     .status(500)
+            //     .json(err)
+            // }else{
                 if(data !== null){
-                    let { _id: id, email, phone, image, credits, isAdmin,  } = data
+                    let { _id: id, email, phone, image, credits, isAdmin, imageFile  } = data
                     let hash = data.password 
                     bcrpyt.compare(req.body.password, hash, (err,same) => {
-                        if (err) {
-                            res
-                            .status(500)
-                            .json({
-                                msg: "failed to login",
-                                err
-                            })
-                        } else {
                             if (same) {
                                 jwt.sign({
                                     id,
@@ -88,21 +81,22 @@ class Controller {
                                     phone,
                                     image,
                                     isAdmin,
-                                    credits
+                                    credits,
+                                    imageFile
                                 }, "secret", (err, token) => {
-                                    if (err) {
-                                        res
-                                        .status(500)
-                                        .json(err)
-                                    } else {
-                                        console.log(token)
+                                    // if (err) {
+                                    //     res
+                                    //     .status(500)
+                                    //     .json(err)
+                                    // } else {
                                         res
                                         .status(200)
                                         .json({
                                             token,
-                                            id
+                                            id,
+                                            isAdmin
                                         })
-                                    }
+                                    
                                 })
                             } else {
                                 res
@@ -111,7 +105,7 @@ class Controller {
                                     msg: "wrong password"
                                 })
                             }
-                        }
+
                     })
                 }else{
                     res
@@ -120,13 +114,12 @@ class Controller {
                         msg: "user does not exist"
                     })
                 }
-            }
         })
     }
 
     static registerAdmin (req, res) {
         let saltRounds = 5;
-        let { username, email, phone, password, image } = req.body
+        let { username, email, phone, password, image, imageFile } = req.body
         bcrpyt.hash(password, saltRounds, (err,hash) => {
             if (err) {
                 res
@@ -141,7 +134,8 @@ class Controller {
                     phone,
                     image,
                     password: hash,
-                    isAdmin: true
+                    isAdmin: true,
+                    imageFile
                 })
                 .then((credentials => {
                     res
@@ -152,7 +146,6 @@ class Controller {
                     })
                 }))
                 .catch((err => {
-                    console.log(err.message)
                     res
                     .status(400)
                     .json({
@@ -170,7 +163,6 @@ class Controller {
             $inc: { credits: amount }
         })
         .then((result => {
-            console.log("ini hasil topup",result)
             res
             .status(201)
             .json({
