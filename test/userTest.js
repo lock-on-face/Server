@@ -66,7 +66,6 @@ describe('User', () => {
       chai.request(app)
       .post('/users/signup')
       .send({
-        'email': 'jack@mail.com',
         'username': 'jack',
         'password': '12345',
         'phone': 'testingphone12345',
@@ -83,6 +82,13 @@ describe('User', () => {
       this.timeout(10000);
       chai.request(app)
       .post('/users/signup')
+      .send({
+        'email': 'jasck@mail.com',
+        'username': 'jacks',
+        'phone': 'testingphone12345',
+        'image': 'testingImage12345',
+        'imageFile': 'filetesting'
+      })
       .end(function (err,res){
         res.should.have.status(500)
         done();
@@ -178,7 +184,6 @@ describe('User', () => {
       chai.request(app)
       .post('/users/admin')
       .send({
-        "username": "mario",
         "password": "12345",
         "email": "marioadmin@mail.com",
         "phone": "phoneAdmin1",
@@ -248,13 +253,37 @@ describe('User', () => {
         }
     })
 
-    it('should get error when top up', (done) =>{
-      chai.request(app)
-      .put('/users/topup')
-      .end((err,res) =>{
-        res.should.have.status(403)
+    it('should get error when top up', async function(done){
+      try {
+        const data = await User.findOne({
+          username: 'jack'
+        })
+        let token = jwt.sign({
+          id: data._id,
+          username: data.username,
+          email: data.email,
+          phone: data.phone,
+          image: data.image,
+          isAdmin: data.isAdmin,
+          credits: data.credits,
+          imageFile:data.imageFile
+        },"secret")
+        chai.request(app)
+        .put('/users/topup')
+        .set('token',token)
+        .send({
+          "owner": "null",
+          "amount": "null"
+        })
+        .end((err,res) =>{
+          res.should.have.status(500)
+          done()
+        })
+      } catch (error) {
+        console.log(error)
         done()
-      })
+      }
+     
     })
     
 })

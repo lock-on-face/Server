@@ -1,5 +1,6 @@
 const lockerModel = require('../model/lockerModel')
 
+
 class Controller {
 
     static createLocker (req, res) {
