@@ -64,23 +64,15 @@ class Controller {
     static signIn(req,res){
         let { username, password } = req.body
         userModel.findOne({ $or:[ {username}, {email: username} ] },(err,data)=>{
-            if (err) {
-                res
-                .status(500)
-                .json(err)
-            }else{
+            // if (err) {
+            //     res
+            //     .status(500)
+            //     .json(err)
+            // }else{
                 if(data !== null){
                     let { _id: id, email, phone, image, credits, isAdmin, imageFile  } = data
                     let hash = data.password 
                     bcrpyt.compare(req.body.password, hash, (err,same) => {
-                        if (err) {
-                            res
-                            .status(500)
-                            .json({
-                                msg: "failed to login",
-                                err
-                            })
-                        } else {
                             if (same) {
                                 jwt.sign({
                                     id,
@@ -92,11 +84,11 @@ class Controller {
                                     credits,
                                     imageFile
                                 }, "secret", (err, token) => {
-                                    if (err) {
-                                        res
-                                        .status(500)
-                                        .json(err)
-                                    } else {
+                                    // if (err) {
+                                    //     res
+                                    //     .status(500)
+                                    //     .json(err)
+                                    // } else {
                                         res
                                         .status(200)
                                         .json({
@@ -104,7 +96,7 @@ class Controller {
                                             id,
                                             isAdmin
                                         })
-                                    }
+                                    
                                 })
                             } else {
                                 res
@@ -113,7 +105,7 @@ class Controller {
                                     msg: "wrong password"
                                 })
                             }
-                        }
+
                     })
                 }else{
                     res
@@ -122,7 +114,6 @@ class Controller {
                         msg: "user does not exist"
                     })
                 }
-            }
         })
     }
 

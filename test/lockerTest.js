@@ -79,8 +79,8 @@ describe('Locker', () =>{
         res.body.data.should.be.a('object')
         res.body.data.serialNumber.should.be.a('string')
         res.body.data.owner.should.be.a('string')
+        done()
       })
-      done()
     } catch (error) {
       console.log(error)
       done()
@@ -111,8 +111,8 @@ describe('Locker', () =>{
       })
       .end((err,res)=>{
         res.should.have.status(400)
+        done()
       })
-      done()
     } catch (error) {
       console.log(error)
       done()
@@ -134,8 +134,8 @@ describe('Locker', () =>{
       res.body.data[0].should.have.property('serialNumber')
       res.body.data[0].should.have.property('rented')
       res.body.data[0].should.have.property('_id')
+      done()
     })
-    done()
   })
 
   it('GET /self should get one data locker', async function(done){
@@ -225,7 +225,7 @@ describe('Locker', () =>{
   it('should failed update locker', async function(done){
     try {
       const dataUser = await User.findOne({
-        username: "cherry",
+        username: "cherry"
       })
       var token = jwt.sign({
         username: dataUser.username,
@@ -237,16 +237,16 @@ describe('Locker', () =>{
         imageFile: dataUser.imageFile
       },"secret")
       const locker = await Locker.findOne({
-        serialNumber: "002"
+        serialNumber: "001"
       })
       chai.request(app)
       .put(`/locker/${locker._id}`)
       .set('token',token)
       .send({
-        "owner": "null",
+        "owner": "undefined",
         "items": "rahasia",
-        "rented": "woi",
-        "isLocked": "woi"
+        "rented": "undefined",
+        "isLocked": "undefined"
       })
       .end((err,res) =>{
         res.should.have.status(400)
@@ -258,6 +258,8 @@ describe('Locker', () =>{
     }
   })
 
+ 
+
   it('DELETE /locker/:id should delete data locker', (done) =>{
     chai.request(app)
     .delete('/locker/5ba340cd9d4b05306f475502')
@@ -266,6 +268,33 @@ describe('Locker', () =>{
       res.should.have.status(201)
       done()
     })
+  })
+
+  it('should failed delete locker', async function(done){
+    try {
+      const dataUser = await User.findOne({
+        username: "cherry"
+      })
+      var token = jwt.sign({
+        username: dataUser.username,
+        password: dataUser.password,
+        email: dataUser.email,
+        id: dataUser._id,
+        phone: dataUser.phone,
+        image: dataUser.image,
+        imageFile: dataUser.imageFile
+      },"secret")
+      chai.request(app)
+      .delete('/locker/1giuhgui7798')
+      .set('token',token)
+      .end(function(err,res){
+        res.should.have.status(400)
+        done()
+      })
+    } catch (error) {
+      console.log(error)
+      done()
+    }
   })
 
 })

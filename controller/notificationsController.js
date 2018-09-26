@@ -27,8 +27,8 @@ class Controller {
         notificationModel.find({
             owner
         })
+        .populate('owner')
         .then((data => {
-            console.log("ini data read",data)
             res
             .status(200)
             .json({
